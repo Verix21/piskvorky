@@ -13,7 +13,7 @@
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  background-color: rgb(157, 201, 255);
+  background-color: rgb(117, 204, 255);
 }
 
 .board {
@@ -25,7 +25,7 @@
   border-collapse: collapse;
   border-style: solid;
   border-width: 2px;
-  border-color: rgb(71, 62, 62);
+  border-color: rgb(255, 255, 255);
 }
 
 .boardCell {
@@ -35,7 +35,7 @@
   height: 100px;
   border-style: solid;
   border-width: 2px;
-  border-color: rgb(98, 98, 98);
-  color: rgb(98, 98, 98);
+  border-color: rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   cursor: pointer;
 }
