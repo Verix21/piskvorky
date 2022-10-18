@@ -4,6 +4,7 @@ import "./App.css";
 type Value = "x" | "o" | null;
 
 function App() {
+  const [boardSize, setBoardSize] = useState<number>();
   const [boardState, setBoardState] = useState<Value[][]>([
     [null, null, null],
     [null, null, null],
@@ -12,162 +13,94 @@ function App() {
   const [player, setPlayer] = useState<boolean>(false);
   const [win, setWin] = useState<boolean>(false);
   const [draw, setDraw] = useState<boolean>(false);
-  let [moveCounter, setMovecounter] = useState<number>(0);
 
-  // console.log(moveCounter, 'moves')
-
-  const winCondition = () => {
-    if (
-      boardState[0][0] === "x" &&
-      boardState[0][1] === "x" &&
-      boardState[0][2] === "x"
-    )
-      setWin(true);
-    if (
-      boardState[0][0] === "o" &&
-      boardState[0][1] === "o" &&
-      boardState[0][2] === "o"
-    )
-      setWin(true);
-
-    if (
-      boardState[1][0] === "x" &&
-      boardState[1][1] === "x" &&
-      boardState[1][2] === "x"
-    )
-      setWin(true);
-    if (
-      boardState[1][0] === "o" &&
-      boardState[1][1] === "o" &&
-      boardState[1][2] === "o"
-    )
-      setWin(true);
-
-    if (
-      boardState[2][0] === "x" &&
-      boardState[2][1] === "x" &&
-      boardState[2][2] === "x"
-    )
-      setWin(true);
-    if (
-      boardState[2][0] === "o" &&
-      boardState[2][1] === "o" &&
-      boardState[2][2] === "o"
-    )
-      setWin(true);
-
-    if (
-      boardState[0][0] === "x" &&
-      boardState[1][0] === "x" &&
-      boardState[2][0] === "x"
-    )
-      setWin(true);
-    if (
-      boardState[0][0] === "o" &&
-      boardState[1][0] === "o" &&
-      boardState[2][0] === "o"
-    )
-      setWin(true);
-
-    if (
-      boardState[0][1] === "x" &&
-      boardState[1][1] === "x" &&
-      boardState[2][1] === "x"
-    )
-      setWin(true);
-    if (
-      boardState[0][1] === "o" &&
-      boardState[1][1] === "o" &&
-      boardState[2][1] === "o"
-    )
-      setWin(true);
-
-    if (
-      boardState[0][2] === "x" &&
-      boardState[1][2] === "x" &&
-      boardState[2][2] === "x"
-    )
-      setWin(true);
-    if (
-      boardState[0][2] === "o" &&
-      boardState[1][2] === "o" &&
-      boardState[2][2] === "o"
-    )
-      setWin(true);
-
-    if (
-      boardState[0][0] === "x" &&
-      boardState[1][1] === "x" &&
-      boardState[2][2] === "x"
-    )
-      setWin(true);
-    if (
-      boardState[0][2] === "x" &&
-      boardState[1][1] === "x" &&
-      boardState[2][0] === "x"
-    )
-      setWin(true);
-
-    if (
-      boardState[0][0] === "o" &&
-      boardState[1][1] === "o" &&
-      boardState[2][2] === "o"
-    )
-      setWin(true);
-    if (
-      boardState[0][2] === "o" &&
-      boardState[1][1] === "o" &&
-      boardState[2][0] === "o"
-    )
-      setWin(true);
+  const dyamicWinCondition = () => {
+    let diagonalA: Value[] = [];
+    let diagonalB: Value[] = [];
+    let diagonals: Value[] = [];
+    console.log("diagonalA", diagonalA, "diagonalB", diagonalB);
+    for (let i = 0; i < boardState.length; i++) {
+      for (let j = 0; j < i; j++) {
+        let k = i - j;
+        diagonals.push(boardState[k][j]);
+        console.log("diagTest", diagonals);
+      }
+    }
+    for (let i = 0; i < boardState.length; i++) {
+      for (let j = 0; j < boardState.length; j++) {
+        if (i === j) diagonalA.push(boardState[i][j]);
+        if (i + j === boardState.length - 1) diagonalB.push(boardState[i][j]);
+      }
+      if (!boardState[i].includes("x") && !boardState[i].includes(null))
+        setWin(true);
+      if (!boardState[i].includes("o") && !boardState[i].includes(null))
+        setWin(true);
+      if (
+        !boardState.map((row) => row[i]).includes("x") &&
+        !boardState.map((row) => row[i]).includes(null)
+      )
+        setWin(true);
+      if (
+        !boardState.map((row) => row[i]).includes("o") &&
+        !boardState.map((row) => row[i]).includes(null)
+      )
+        setWin(true);
+    }
+    console.log("diagonalA", diagonalA, "diagonalB", diagonalB);
+    if (!diagonalA.includes("x") && !diagonalA.includes(null)) setWin(true);
+    if (!diagonalA.includes("o") && !diagonalA.includes(null)) setWin(true);
+    if (!diagonalB.includes("x") && !diagonalB.includes(null)) setWin(true);
+    if (!diagonalB.includes("o") && !diagonalB.includes(null)) setWin(true);
   };
 
   const drawCondition = () => {
-    setMovecounter(++moveCounter);
+    let drawCheck = boardState.map((row) => row.includes(null));
+    if (!drawCheck.includes(true)) {
+      setDraw(true);
+    }
   };
 
   useEffect(() => {
-    if (win && player) console.log("player 1 (x) won");
-    if (win && !player) console.log("player 1 (o) won");
-    if (moveCounter === 18) {
-      setDraw(true);
-      console.log("it's a draw!");
-    }
-  }, [win, moveCounter]);
+    if (win && player) window.alert("Player 1 (x) won!");
+    if (win && !player) window.alert("Player 1 (o) won!");
+    if (!win && draw) window.alert("It's a draw!");
+  }, [win, draw]);
 
   const onClick = (cellValue: Value, rowIndex: number, cellIndex: number) => {
     let boardCopy = [...boardState];
-    if (!cellValue && !player) {
+    if (!cellValue && !player && !win) {
       boardCopy[rowIndex][cellIndex] = "x";
       setBoardState(boardCopy);
       setPlayer(!player);
-      winCondition();
+      dyamicWinCondition();
       drawCondition();
     }
-    if (!cellValue && player) {
+    if (!cellValue && player && !win) {
       boardCopy[rowIndex][cellIndex] = "o";
       setBoardState(boardCopy);
       setPlayer(!player);
-      winCondition();
+      dyamicWinCondition();
       drawCondition();
     }
   };
 
   return (
     <div className="App">
-      {boardState.map((row, rowIndex) => (
-        <tr key={rowIndex}>
-          {row.map((cellValue, cellIndex) => (
-            <th
-              className="boardCell"
-              key={cellIndex}
-              onClick={() => onClick(cellValue, rowIndex, cellIndex)}
-            >
-              {cellValue}
-            </th>
-          ))}
-        </tr>
-      ))}
+      <table className="board">
+        {boardState.map((row, rowIndex) => (
+          <tr className="row" key={rowIndex}>
+            {row.map((cellValue, cellIndex) => (
+              <td
+                className="boardCell"
+                key={cellIndex}
+                onClick={() => onClick(cellValue, rowIndex, cellIndex)}
+              >
+                {cellValue}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </table>
     </div>
   );
 }
