@@ -22,57 +22,44 @@ function App() {
   const winCondition = () => {
     let diagonalA: Value[] = [];
     let diagonalB: Value[] = [];
-    // let diagonalsA: Array<Value[]> = [];
-    // let diagonalsB: Array<Value[]> = [];
-    // // for (let i = 0; i < boardState.length; i++) {
-    // //   diagonalsA.push([]);
-    // //   for (let j = 0; j <= i; j++) {
-    // //     let k = i - j;
-    // //     diagonalsA[i]!.push(boardState[k][j]);
-    // //     console.log("diagTest", diagonalsA);
-    // //   }
-    // // }
-    // // for (let i = boardState.length - 2; i >= 0; i--) {
-    // //   diagonalsB.push([]);
-    // //   for (let j = 0; j <= i; j++) {
-    // //     let k = i - j;
-    // //     diagonalsB[diagonalsB.length - 1]!.push(
-    // //       boardState[boardSize - j - 1][boardSize - k - 1]
-    // //     );
-    // //     console.log("diagTest", diagonalsB);
-    // //   }
-    // // }
+
     for (let i = 0; i < boardState!.length; i++) {
       for (let j = 0; j < boardState!.length; j++) {
         if (i === j) diagonalA.push(boardState![i][j]);
         if (i + j === boardState!.length - 1) diagonalB.push(boardState![i][j]);
       }
-      if (!boardState![i].includes("x") && !boardState![i].includes(null))
-        setWin(true);
-      if (!boardState![i].includes("o") && !boardState![i].includes(null))
-        setWin(true);
-      if (
-        !boardState!.map((row) => row[i]).includes("x") &&
-        !boardState!.map((row) => row[i]).includes(null)
-      )
-        setWin(true);
-      if (
-        !boardState!.map((row) => row[i]).includes("o") &&
-        !boardState!.map((row) => row[i]).includes(null)
-      )
-        setWin(true);
+      checkRows(i);
+      checkCollumns(i);
     }
+    checkDiagonals(diagonalA, diagonalB);
+  };
+
+  const checkRows = (i: number) => {
+    if (!boardState![i].includes("x") && !boardState![i].includes(null))
+      setWin(true);
+    if (!boardState![i].includes("o") && !boardState![i].includes(null))
+      setWin(true);
+  };
+
+  const checkCollumns = (i: number) => {
+    if (
+      !boardState!.map((row) => row[i]).includes("x") &&
+      !boardState!.map((row) => row[i]).includes(null)
+    )
+      setWin(true);
+    if (
+      !boardState!.map((row) => row[i]).includes("o") &&
+      !boardState!.map((row) => row[i]).includes(null)
+    )
+      setWin(true);
+  };
+
+  const checkDiagonals = (diagonalA: Value[], diagonalB: Value[]) => {
     if (!diagonalA.includes("x") && !diagonalA.includes(null)) setWin(true);
     if (!diagonalA.includes("o") && !diagonalA.includes(null)) setWin(true);
     if (!diagonalB.includes("x") && !diagonalB.includes(null)) setWin(true);
     if (!diagonalB.includes("o") && !diagonalB.includes(null)) setWin(true);
   };
-
-  const checkRows = () => {};
-
-  const checkCollumns = () => {};
-
-  const checkDiagonals = () => {};
 
   const drawCondition = () => {
     let drawCheck = boardState!.map((row) => row.includes(null));
@@ -82,8 +69,8 @@ function App() {
   };
 
   useEffect(() => {
-    if (win && playerSwitch) setEndResult("Player 1 (x) won!");
-    if (win && !playerSwitch) setEndResult("Player 2 (o) won!");
+    if (win && playerSwitch) setEndResult("Player 1 (x) has won!");
+    if (win && !playerSwitch) setEndResult("Player 2 (o) has won!");
     if (!win && draw) setEndResult("It's a draw!!");
   }, [win, draw]);
 
