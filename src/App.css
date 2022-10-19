@@ -16,6 +16,21 @@
   background-color: rgb(117, 204, 255);
 }
 
+.startScreen{
+  font-size: 30px;
+  display: flex;
+  flex-direction: column;
+  color: rgb(83, 83, 83);;
+}
+
+.gameInfo{
+  color: rgb(83, 83, 83);
+  margin-bottom: 50px;
+  font-size: 30px;
+}
+
+
+
 .board {
   border-collapse: collapse;
   border-style: hidden;
@@ -37,5 +52,18 @@
   border-width: 2px;
   border-color: rgb(255, 255, 255);
   color: rgb(255, 255, 255);
+  cursor: pointer;
+}
+
+.buttons{
+  margin-top: 50px;
+  border-style: solid;
+  border-radius: 0;
+  color: rgb(83, 83, 83);;
+  border-color: rgb(255, 255, 255);
+  border-width: 5px;
+  background-color: rgb(117, 204, 255);
+  font-size: 30px;
+  padding: 20px;
   cursor: pointer;
 }

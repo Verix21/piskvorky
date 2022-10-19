@@ -1,12 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
 type Value = "x" | "o" | null;
 
 function App() {
-  const [boardSize, setBoardSize] = useState<number>();
   const [boardState, setBoardState] = useState<Value[][]>();
-  const [player, setPlayer] = useState<boolean>(false);
+  const [playerSwitch, setPlayerSwitch] = useState<boolean>(false);
   const [win, setWin] = useState<boolean>(false);
   const [draw, setDraw] = useState<boolean>(false);
   const [endResult, setEndResult] = useState<string>();
@@ -19,29 +19,29 @@ function App() {
     );
   };
 
-  const dyamicWinCondition = () => {
+  const winCondition = () => {
     let diagonalA: Value[] = [];
     let diagonalB: Value[] = [];
-    let diagonalsA: Array<Value[]> = [];
-    let diagonalsB: Array<Value[]> = [];
-    // for (let i = 0; i < boardState.length; i++) {
-    //   diagonalsA.push([]);
-    //   for (let j = 0; j <= i; j++) {
-    //     let k = i - j;
-    //     diagonalsA[i]!.push(boardState[k][j]);
-    //     console.log("diagTest", diagonalsA);
-    //   }
-    // }
-    // for (let i = boardState.length - 2; i >= 0; i--) {
-    //   diagonalsB.push([]);
-    //   for (let j = 0; j <= i; j++) {
-    //     let k = i - j;
-    //     diagonalsB[diagonalsB.length - 1]!.push(
-    //       boardState[boardSize - j - 1][boardSize - k - 1]
-    //     );
-    //     console.log("diagTest", diagonalsB);
-    //   }
-    // }
+    // let diagonalsA: Array<Value[]> = [];
+    // let diagonalsB: Array<Value[]> = [];
+    // // for (let i = 0; i < boardState.length; i++) {
+    // //   diagonalsA.push([]);
+    // //   for (let j = 0; j <= i; j++) {
+    // //     let k = i - j;
+    // //     diagonalsA[i]!.push(boardState[k][j]);
+    // //     console.log("diagTest", diagonalsA);
+    // //   }
+    // // }
+    // // for (let i = boardState.length - 2; i >= 0; i--) {
+    // //   diagonalsB.push([]);
+    // //   for (let j = 0; j <= i; j++) {
+    // //     let k = i - j;
+    // //     diagonalsB[diagonalsB.length - 1]!.push(
+    // //       boardState[boardSize - j - 1][boardSize - k - 1]
+    // //     );
+    // //     console.log("diagTest", diagonalsB);
+    // //   }
+    // // }
     for (let i = 0; i < boardState!.length; i++) {
       for (let j = 0; j < boardState!.length; j++) {
         if (i === j) diagonalA.push(boardState![i][j]);
@@ -68,6 +68,12 @@ function App() {
     if (!diagonalB.includes("o") && !diagonalB.includes(null)) setWin(true);
   };
 
+  const checkRows = () => {};
+
+  const checkCollumns = () => {};
+
+  const checkDiagonals = () => {};
+
   const drawCondition = () => {
     let drawCheck = boardState!.map((row) => row.includes(null));
     if (!drawCheck.includes(true)) {
@@ -76,42 +82,53 @@ function App() {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      if (win && player) setEndResult("Player 1 (x) won!");
-      if (win && !player) setEndResult("Player 2 (o) won!");
-      if (!win && draw) setEndResult("It's a draw!!");
-    }, 100);
+    if (win && playerSwitch) setEndResult("Player 1 (x) won!");
+    if (win && !playerSwitch) setEndResult("Player 2 (o) won!");
+    if (!win && draw) setEndResult("It's a draw!!");
   }, [win, draw]);
 
   const onClick = (cellValue: Value, rowIndex: number, cellIndex: number) => {
     let boardCopy = [...boardState!];
-    if (!cellValue && !player && !win) {
+    if (!cellValue && !playerSwitch && !win) {
       boardCopy[rowIndex][cellIndex] = "x";
       setBoardState(boardCopy);
-      setPlayer(!player);
-      dyamicWinCondition();
+      setPlayerSwitch(!playerSwitch);
+      winCondition();
       drawCondition();
     }
-    if (!cellValue && player && !win) {
+    if (!cellValue && playerSwitch && !win) {
       boardCopy[rowIndex][cellIndex] = "o";
       setBoardState(boardCopy);
-      setPlayer(!player);
-      dyamicWinCondition();
+      setPlayerSwitch(!playerSwitch);
+      winCondition();
       drawCondition();
     }
   };
 
   return (
     <div className="App">
-      {!player && !win && !draw && boardState && <p>Player 1's turn</p>}
-      {player && !win && !draw && boardState && <p>Player 2's turn</p>}
+      <div className="gameInfo">
+        {!playerSwitch && !win && !draw && boardState && (
+          <p>Player one's turn</p>
+        )}
+        {playerSwitch && !win && !draw && boardState && (
+          <p>Player two's turn</p>
+        )}
+        {endResult && <p>{endResult}</p>}
+      </div>
       {!boardState && (
-        <>
+        <div className="startScreen">
           <p>Select board size:</p>
-          <button onClick={() => boardDimensions(3)}>3x3</button>
-          <button onClick={() => boardDimensions(4)}>4x4</button>
-          <button onClick={() => boardDimensions(5)}>5x5</button>
-        </>
+          <button className="buttons" onClick={() => boardDimensions(3)}>
+            3x3
+          </button>
+          <button className="buttons" onClick={() => boardDimensions(4)}>
+            4x4
+          </button>
+          <button className="buttons" onClick={() => boardDimensions(5)}>
+            5x5
+          </button>
+        </div>
       )}
       {boardState && (
         <table className="board">
@@ -132,14 +149,15 @@ function App() {
           </tbody>
         </table>
       )}
-      {endResult && <p>{endResult}</p>}
       {(win || draw) && (
         <button
+          className="buttons"
           onClick={() => {
             setBoardState(null!);
             setWin(null!);
             setDraw(null!);
             setEndResult(null!);
+            setPlayerSwitch(false);
           }}
         >
           Reset board?
