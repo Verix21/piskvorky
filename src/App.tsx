@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import "./App.css"
 
 type Value = "x" | "o" | null
@@ -13,10 +13,7 @@ type GameState =
 
 function App() {
   const [boardState, setBoardState] = useState<Board>(null)
-  const [endResult, setEndResult] = useState<string>("")
   const [gameState, setGameState] = useState<GameState>("playerTurnX")
-
-  console.log(gameState)
 
   const boardDimensions = (size: number) => {
     setBoardState(
@@ -87,12 +84,6 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    if (gameState === "playerWinX") setEndResult("Player 1 (x) has won!")
-    if (gameState === "playerWinO") setEndResult("Player 2 (o) has won!")
-    if (gameState === "draw") setEndResult("It's a draw!!")
-  }, [gameState])
-
   const onClick = (cellValue: Value, rowIndex: number, cellIndex: number) => {
     const boardCopy = [...boardState!]
     if (!cellValue && gameState === "playerTurnX") {
@@ -111,9 +102,15 @@ function App() {
   return (
     <div className="App">
       <div className="gameInfo">
-        {gameState === "playerTurnX" && boardState && <p>Player one's turn</p>}
-        {gameState === "playerTurnO" && boardState && <p>Player two's turn</p>}
-        {endResult && <p>{endResult}</p>}
+        {gameState === "playerTurnX" && boardState && (
+          <p>Player one's (x) turn</p>
+        )}
+        {gameState === "playerTurnO" && boardState && (
+          <p>Player two's (o) turn</p>
+        )}
+        {gameState === "playerWinX" && <p>Player 1 (x) has won!</p>}
+        {gameState === "playerWinO" && <p>Player 2 (o) has won!</p>}
+        {gameState === "draw" && <p>It's a draw!</p>}
       </div>
       {!boardState && (
         <div className="startScreen">
@@ -156,7 +153,6 @@ function App() {
           onClick={() => {
             setBoardState(null)
             setGameState("playerTurnX")
-            setEndResult("")
           }}
         >
           Reset board?
