@@ -84,7 +84,7 @@ function App() {
     }
   }
 
-  const onClick = (
+  const handleTurn = (
     cellValue: Value,
     rowIndex: number,
     cellIndex: number
@@ -139,7 +139,7 @@ function App() {
                   <td
                     className="boardCell"
                     key={cellIndex}
-                    onClick={() => onClick(cellValue, rowIndex, cellIndex)}
+                    onClick={() => handleTurn(cellValue, rowIndex, cellIndex)}
                   >
                     {cellValue}
                   </td>
