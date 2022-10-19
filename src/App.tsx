@@ -15,7 +15,7 @@ function App() {
   const [boardState, setBoardState] = useState<Board>(null)
   const [gameState, setGameState] = useState<GameState>("playerTurnX")
 
-  const boardDimensions = (size: number) => {
+  const boardDimensions = (size: number): void => {
     setBoardState(
       Array(size)
         .fill(null)
@@ -23,7 +23,7 @@ function App() {
     )
   }
 
-  const checkRows = (i: number) => {
+  const checkRows = (i: number): void => {
     if (!boardState![i].includes("x") && !boardState![i].includes(null)) {
       setGameState("playerWinO")
     }
@@ -32,7 +32,7 @@ function App() {
     }
   }
 
-  const checkCollumns = (i: number) => {
+  const checkCollumns = (i: number): void => {
     if (
       !boardState!.map((row) => row[i]).includes("x") &&
       !boardState!.map((row) => row[i]).includes(null)
@@ -47,7 +47,7 @@ function App() {
     }
   }
 
-  const checkDiagonals = (diagonalA: Value[], diagonalB: Value[]) => {
+  const checkDiagonals = (diagonalA: Value[], diagonalB: Value[]): void => {
     if (!diagonalA.includes("x") && !diagonalA.includes(null)) {
       setGameState("playerWinO")
     }
@@ -62,7 +62,7 @@ function App() {
     }
   }
 
-  const winCondition = () => {
+  const winCondition = (): void => {
     let diagonalA: Value[] = []
     let diagonalB: Value[] = []
 
@@ -77,15 +77,19 @@ function App() {
     checkDiagonals(diagonalA, diagonalB)
   }
 
-  const drawCondition = () => {
-    const drawCheck = boardState!.map((row) => row.includes(null))
+  const drawCondition = (): void => {
+    const drawCheck: boolean[] = boardState!.map((row) => row.includes(null))
     if (!drawCheck.includes(true)) {
       setGameState("draw")
     }
   }
 
-  const onClick = (cellValue: Value, rowIndex: number, cellIndex: number) => {
-    const boardCopy = [...boardState!]
+  const onClick = (
+    cellValue: Value,
+    rowIndex: number,
+    cellIndex: number
+  ): void => {
+    const boardCopy: Board = [...boardState!]
     if (!cellValue && gameState === "playerTurnX") {
       boardCopy[rowIndex][cellIndex] = "x"
     }
